@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PicSpot</title>
+</head>
+<body>
+    <h1>Welcome to PicSpot</h1>
+    <form id="prompt-form">
+        <label for="prompt">Enter a prompt for the posters:</label>
+        <input type="text" name="prompt" id="prompt" required>
+        <button type="submit">Generate</button>
+    </form>
+    <div id="result">
+        <p>Corrected Text:</p>
+        <div id="corrected-text"></div>
+        <p>Generated Poster:</p>
+        <img id="generated-poster" src="" alt="Generated Poster">
+    </div>
+    <script>
+        const form = document.getElementById('prompt-form');
+        const resultDiv = document.getElementById('result');
+        const correctedTextDiv = document.getElementById('corrected-text');
+        const generatedPosterImg = document.getElementById('generated-poster');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const prompt = document.getElementById('prompt').value;
+            const response = await fetch('/generate_poster', {
+                method: 'POST',
+                body: new URLSearchParams({ 'prompt': prompt }),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            });
+            const data = await response.json();
+            correctedTextDiv.textContent = data.corrected_text;
+            generatedPosterImg.src = `/static/filtered_poster.png`;  // Update the image source
+        });
+    </script>
+</body>
+</html>
